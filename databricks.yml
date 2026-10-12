@@ -1,0 +1,46 @@
+bundle:
+  name: creditflow
+variables:
+  cluster_id:
+    description: Existing compatible Databricks cluster; install wheel per task
+  input_path:
+    description: Synthetic JSONL in a Unity Catalog Volume
+  catalog:
+    default: creditflow
+  schema:
+    default: demo
+  secret_scope:
+    default: creditflow
+  secret_key:
+    default: token-key
+artifacts:
+  default:
+    type: whl
+    build: python -m build
+resources:
+  jobs:
+    creditflow:
+      name: creditflow-batch
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: lakehouse
+          existing_cluster_id: ${var.cluster_id}
+          spark_python_task:
+            python_file: ./spark/lakehouse.py
+            parameters:
+              - --input
+              - ${var.input_path}
+              - --catalog
+              - ${var.catalog}
+              - --schema
+              - ${var.schema}
+              - --secret-scope
+              - ${var.secret_scope}
+              - --secret-key
+              - ${var.secret_key}
+          libraries:
+            - whl: ./dist/*.whl
+targets:
+  dev:
+    default: true
+    mode: development

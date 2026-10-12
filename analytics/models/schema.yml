@@ -1,0 +1,19 @@
+version: 2
+models:
+  - name: stg_applications
+    description: Validated synthetic applications, with customer identifiers excluded.
+    columns:
+      - name: application_id
+        tests: [unique, not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              values: [approved, rejected, pending]
+      - name: channel
+        tests:
+          - accepted_values:
+              values: [broker, direct, partner]
+      - name: application_date
+        tests: [not_null]
+  - name: fct_daily_lending
+    description: Daily requested and approved lending volumes by acquisition channel.

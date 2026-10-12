@@ -1,0 +1,30 @@
+name: deploy-databricks-dev
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: databricks-dev-deploy
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: databricks-dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -e . build
+      - run: python -m unittest discover -s tests -v
+      - uses: databricks/setup-cli@main
+      - name: Validate and deploy job definitions
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          BUNDLE_VAR_cluster_id: ${{ vars.DATABRICKS_CLUSTER_ID }}
+          BUNDLE_VAR_input_path: ${{ vars.CREDITFLOW_INPUT_PATH }}
+          BUNDLE_VAR_catalog: ${{ vars.CREDITFLOW_CATALOG }}
+        run: |
+          databricks bundle validate -t dev
+          databricks bundle deploy -t dev

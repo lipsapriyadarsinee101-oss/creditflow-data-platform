@@ -1,0 +1,43 @@
+{
+  "products": [
+    {
+      "name": "gold_daily",
+      "owner": "analytics-team",
+      "grain": [
+        "application_date",
+        "channel"
+      ],
+      "classification": "synthetic-aggregate",
+      "refresh": "daily batch",
+      "consumers": [
+        "reporting",
+        "aggregate-api"
+      ],
+      "checks": [
+        "application counts reconcile",
+        "positive amounts",
+        "accepted status"
+      ],
+      "retention_days": 365
+    },
+    {
+      "name": "gold_features",
+      "owner": "data-science-team",
+      "grain": [
+        "application_id"
+      ],
+      "classification": "synthetic-application-level",
+      "purpose": "Feature preparation demonstration only; no lending decision model",
+      "excludes": [
+        "customer_id",
+        "customer_token",
+        "status"
+      ]
+    }
+  ],
+  "retention": {
+    "bronze_days": 30,
+    "quarantine_days": 14,
+    "note": "Policy targets, not automatically enforced. Implement deletion and backup expiry before real data."
+  }
+}

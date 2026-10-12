@@ -1,0 +1,11 @@
+services:
+  demo:
+    build: .
+    environment:
+      CREDITFLOW_TOKEN_KEY: ${CREDITFLOW_TOKEN_KEY:?Set CREDITFLOW_TOKEN_KEY}
+    volumes:
+      - lake:/app/data
+    entrypoint: ["sh", "-c"]
+    command: ["creditflow generate && creditflow run && creditflow export"]
+volumes:
+  lake:

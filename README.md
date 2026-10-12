@@ -96,7 +96,7 @@ dbt build --project-dir analytics --profiles-dir analytics
 dbt docs generate --project-dir analytics --profiles-dir analytics
 ```
 
-The seed generator runs the validated local pipeline and selects only non-customer fields. The dbt project is a separate DuckDB analytics demonstration; it is not connected to the Databricks silver table. Database paths are resolved by dbt relative to its project directory.
+The seed generator runs the validated local pipeline and selects only non-customer fields. The dbt project is a separate DuckDB analytics demonstration; it is not connected to the Databricks silver table. Run these commands from the repository root; the default database path is data/analytics.duckdb.
 
 ## Containers
 
@@ -115,4 +115,3 @@ Read [Cloud deployment](docs/cloud.md), [Architecture decisions](docs/architectu
 ## Recruiter walkthrough
 
 See [Interview walkthrough](docs/interview.md) for a 10-minute demonstration and a mapping to senior data engineering responsibilities.
-
